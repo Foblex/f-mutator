@@ -1,59 +1,96 @@
-# FMutator
+# @foblex/mutator
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 20.1.1.
+> Lightweight Angular Signals state engine with deep patching, undo/redo, and semantic notifier.
 
-## Development server
+`@foblex/mutator` is a small TypeScript library built on top of `signal()` from `@angular/core`.  
+It allows you to mutate state (`create / update / delete`), supports undo/redo with history limits, and emits semantic updates via a notifier string.
 
-To start a local development server, run:
+|                     |                                   |
+|---------------------|-----------------------------------|
+| **Framework**       | Angular 20 + (Signals)            |
+| **Size**            | < 2 KB min+gzip                   |
+| **Undo limit**      | 50 (customizable via constructor) |
+| **License**         | MIT                               |
 
-```bash
-ng serve
-```
+---
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+## 🚀 Quick Start
 
 ```bash
-ng generate --help
+npm i @foblex/mutator @angular/core
 ```
 
-## Building
+```ts
+import { effect, inject, Injectable } from '@angular/core';
+import { Mutator } from '@foblex/mutator';
 
-To build the project run:
+// 1. Define your state shape
+interface FlowState {
+  nodes: Record<string, { x: number; y: number }>;
+}
 
-```bash
-ng build
+// 2. Create a store class extending Mutator
+@Injectable({ providedIn: 'root' })
+class FlowStore extends Mutator<FlowState> {}
+
+// 3. Inject and initialize the store
+const flow = inject(FlowStore);
+flow.initialize({ nodes: {} });
+
+// 4. React to changes with `effect()`
+effect(() => {
+  const { version, notifier } = flow.changes();
+  console.log('Changed (v' + version + ') by', notifier);
+  console.table(flow.getSnapshot().nodes);
+});
+
+// 5. Perform operations
+flow.create({ nodes: { n1: { x: 0, y: 0 } } }, 'init');
+flow.update({ nodes: { n1: { x: 100, y: 100 } } }, 'move');
+flow.update({ nodes: { n1: { y: 200 } } }, 'drag');
+flow.undo(); // ⬅️ back to y: 100
+flow.redo(); // ➡️ forward to y: 200
 ```
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+---
+## 🔧 API Reference
 
-## Running unit tests
+| Method                                   | Description                                              |
+|------------------------------------------|----------------------------------------------------------|
+| `initialize(base)`                       | Set initial state and clears history                     |
+| `create(patch, notifier?)`               | Adds new data                                            |
+| `update(patch, notifier?)`               | Updates existing fields (deep merge)                     |
+| `delete(patch, notifier?)`               | Removes keys deeply                                      |
+| `undo() / redo()`                        | Undo / redo one step                                     |
+| `getSnapshot()`                          | Current state (base + stack)                             |
+| `changes: Signal<{ version; notifier }>` | Version + source of change                               |
+| `canUndo / canRedo: Signal<boolean>`     | Live flags for UI buttons                                |
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+### Types
 
-```bash
-ng test
+```ts
+interface MutatorChange {
+  version: number;
+  notifier: string | null;
+}
+
+type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+};
 ```
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## ⚙️ Undo Limit
 
-```bash
-ng e2e
+```ts
+provideMutator({
+  limit: 100, // Default is 50
+})
 ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📄 License
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+MIT © Foblex

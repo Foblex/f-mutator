@@ -87,6 +87,36 @@
           }
         }
       }
+    },
+    "mutator": {
+      "projectType": "library",
+      "root": "projects/mutator",
+      "sourceRoot": "projects/mutator/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular/build:ng-packagr",
+          "configurations": {
+            "production": {
+              "tsConfig": "projects/mutator/tsconfig.lib.prod.json"
+            },
+            "development": {
+              "tsConfig": "projects/mutator/tsconfig.lib.json"
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "test": {
+          "builder": "@angular/build:karma",
+          "options": {
+            "tsConfig": "projects/mutator/tsconfig.spec.json",
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ]
+          }
+        }
+      }
     }
   }
 }
