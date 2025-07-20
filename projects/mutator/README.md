@@ -17,7 +17,7 @@ It allows you to mutate state (`create / update / delete`), supports und
 ## 🚀 Quick Start
 
 ```bash
-npm i @foblex/mutator @angular/core
+npm i @foblex/mutator
 ```
 
 ```ts
