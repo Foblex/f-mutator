@@ -1,0 +1,33 @@
+{
+  "name": "@foblex/mutator",
+  "version": "1.0.1",
+  "description": "Angular Signals state engine with deep patch + undo/redo and notifier.",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "author": "Siarhei Huzarevich",
+  "homepage": "https://mutator.foblex.com",
+  "docs": "https://mutator.foblex.com/docs/get-started",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/foblex/mutator.git"
+  },
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "angular",
+    "signals",
+    "state",
+    "undo",
+    "redo",
+    "mutator",
+    "deep merge"
+  ],
+  "peerDependencies": {
+    "@angular/common": "^20.1.0",
+    "@angular/core": "^20.1.0"
+  },
+  "dependencies": {
+    "tslib": "^2.3.0"
+  },
+  "sideEffects": false
+}
