@@ -20,6 +20,8 @@ export abstract class Mutator<T extends object> {
   private readonly _undoStack: Changes<T>[] = [];
   private readonly _redoStack: Changes<T>[] = [];
 
+  private _snapshot: T | null = null;
+
   private readonly _config = inject(MUTATOR_CONFIG, {optional: true});
 
   private readonly _limit = this._config?.limit || 50;
@@ -42,6 +44,10 @@ export abstract class Mutator<T extends object> {
 
   public get canRedo(): Signal<boolean> {
     return this._canRedo.asReadonly();
+  }
+
+  public get base(): T {
+    return deepClone(this._base);
   }
 
   public initialize(value: T): void {
@@ -89,14 +95,19 @@ export abstract class Mutator<T extends object> {
 
   private _setChangeObject(notifier: string | null): void {
     this._change.set({version: this._change().version + 1, notifier});
+    this._snapshot = null;
   }
 
   public getSnapshot(): T {
+    if (this._snapshot) {
+      return deepClone(this._snapshot);
+    }
     let result: T = deepClone(this._base);
 
     for (const change of this._undoStack) {
       result = this._applyChange(result, change);
     }
+    this._snapshot = result;
 
     return result;
   }
@@ -129,6 +140,14 @@ export abstract class Mutator<T extends object> {
       this._updateSignals();
       this._setChangeObject(null);
     }
+  }
+
+  public patchBase(patch: DeepPartial<T>): void {
+    this._base = deepMerge(this._base, deepClone(patch));
+  }
+
+  public deleteFromBase(patch: DeepPartial<T>): void {
+    this._base = deepDelete(this._base, deepClone(patch));
   }
 
   private _updateSignals(): void {

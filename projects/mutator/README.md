@@ -7,7 +7,7 @@ It allows you to mutate state (`create / update / delete`), supports und
 
 |                     |                                   |
 |---------------------|-----------------------------------|
-| **Framework**       | Angular 20 + (Signals)            |
+| **Framework**       | Angular 17 + (Signals)            |
 | **Size**            | < 2 KB min+gzip                   |
 | **Undo limit**      | 50 (customizable via constructor) |
 | **License**         | MIT                               |

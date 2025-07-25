@@ -1,6 +1,6 @@
 {
   "name": "@foblex/mutator",
-  "version": "1.0.1",
+  "version": "1.0.4",
   "description": "Angular Signals state engine with deep patch + undo/redo and notifier.",
   "main": "index.js",
   "types": "index.d.ts",
@@ -23,8 +23,8 @@
     "deep merge"
   ],
   "peerDependencies": {
-    "@angular/common": "^20.1.0",
-    "@angular/core": "^20.1.0"
+    "@angular/common": ">=17.0.0",
+    "@angular/core": ">=17.0.0"
   },
   "dependencies": {
     "tslib": "^2.3.0"
