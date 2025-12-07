@@ -1,6 +1,6 @@
 {
   "name": "@foblex/mutator",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "Angular Signals state engine with deep patch + undo/redo and notifier.",
   "main": "index.js",
   "types": "index.d.ts",

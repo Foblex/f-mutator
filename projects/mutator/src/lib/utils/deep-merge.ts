@@ -1,5 +1,3 @@
-import {DeepPartial} from './deep-partial';
-
 export function deepMerge<T>(target: T, patch: DeepPartial<T>): T {
   if (typeof target !== 'object' || target === null) return patch as T;
   if (typeof patch !== 'object' || patch === null) return target;
@@ -32,3 +30,7 @@ function isPlainObject(value: unknown): value is Record<string, any> {
     Object.prototype.toString.call(value) === '[object Object]'
   );
 }
+
+export type DeepPartial<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepPartial<T[K]> : T[K];
+};

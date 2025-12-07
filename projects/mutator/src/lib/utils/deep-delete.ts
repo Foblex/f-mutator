@@ -1,6 +1,4 @@
-import {DeepPartial} from './deep-partial';
-
-export function deepDelete<T>(target: T, patch: DeepPartial<T>): T {
+export function deepDelete<T>(target: T, patch: DeepDelete<T>): T {
   const out: any = Array.isArray(target) ? [...target] : { ...target };
 
   for (const k in patch) {
@@ -14,3 +12,7 @@ export function deepDelete<T>(target: T, patch: DeepPartial<T>): T {
   }
   return out;
 }
+
+export type DeepDelete<T> = {
+  [K in keyof T]?: T[K] extends object ? DeepDelete<T[K]> | null : null;
+};
