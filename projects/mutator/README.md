@@ -1,5 +1,14 @@
 # @foblex/mutator
 
+> [!IMPORTANT]
+> Building state and history for a Foblex Flow editor? Use the built-in
+> [Managed Flow State plugin](https://flow.foblex.com/examples/state), available in
+> `@foblex/flow` v19.1 through `provideFFlow(withFlowState())`. It provides typed graph
+> records, gesture-aware batching, undo/redo, viewport history, and persistable snapshots.
+>
+> `@foblex/mutator` remains available as a standalone state utility, but new Foblex Flow
+> state integrations should use Managed Flow State.
+
 > Lightweight Angular Signals state engine with deep patching, undo/redo, and semantic notifier.
 
 `@foblex/mutator` is a small TypeScript library built on top of `signal()` from `@angular/core`.  
